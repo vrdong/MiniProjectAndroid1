@@ -38,6 +38,7 @@ public class timduong extends FragmentActivity implements GoogleMap.OnMyLocation
     public EditText editOrigin;
     public EditText editDestination;
     public Button btnFind,btnCurOrigin,btnCurDestination;
+    public Intent data = new Intent();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +49,8 @@ public class timduong extends FragmentActivity implements GoogleMap.OnMyLocation
         btnCurOrigin = (Button)findViewById(R.id.btnCurOrigin);
         btnCurDestination = (Button)findViewById(R.id.btnCurDestination);
         btnFind = (Button)findViewById(R.id.btnFind);
-
+     //   data.putExtra("back", "1");
+     //   setResult(123,data);
         btnCurOrigin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,7 +68,7 @@ public class timduong extends FragmentActivity implements GoogleMap.OnMyLocation
             @Override
             public void onClick(View v) {
                // Intent intent = getIntent();
-                Intent data = new Intent();
+              //  Intent data = new Intent();
                 data.putExtra("origin", editOrigin.getText().toString());
                 data.putExtra("destination",editDestination.getText().toString());
                 setResult(123,data);
@@ -88,5 +90,10 @@ public class timduong extends FragmentActivity implements GoogleMap.OnMyLocation
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

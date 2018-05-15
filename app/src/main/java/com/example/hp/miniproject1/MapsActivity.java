@@ -40,16 +40,14 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
         GoogleMap.OnMyLocationClickListener,
         OnMapReadyCallback,DirectionFinderListener{
     public static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 1;
-    private GoogleMap mMap;
-    private Button btnTraCuu,btnTimDuong,btnFindPath;
-    private TextView txtDistance,txtDuration;
-    private EditText editOrigin,editDestinaton;
-    private List<Marker> originMarkers = new ArrayList<>();
-    private List<Marker> destinationMarkers = new ArrayList<>();
-    private List<Polyline> polylinesPaths = new ArrayList<>();
-    private ProgressDialog progressDialog;
- //   public LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-//    public Location myLocation;
+    public GoogleMap mMap;
+    public Button btnTraCuu,btnTimDuong;
+    public List<Marker> originMarkers = new ArrayList<>();
+    public List<Marker> destinationMarkers = new ArrayList<>();
+    public List<Polyline> polylinesPaths = new ArrayList<>();
+    public ProgressDialog progressDialog;
+    public LocationManager lm;
+    public Location myLocation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +55,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
+        lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         btnTraCuu = (Button) findViewById(R.id.btnTraCuu);
         btnTimDuong = (Button) findViewById(R.id.btnTimDuong);
 
@@ -73,7 +71,9 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
         btnTraCuu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Some code here
+                Intent intent1 = new Intent(MapsActivity.this, search_university.class);
+                startActivityForResult(intent1,2);
+            //    setContentView(R.layout.activity_search_university);
             }
         });
     }
@@ -86,6 +86,15 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
             String s2 = data.getStringExtra("destination");
             sendRequest(s1,s2);
         }
+        if(requestCode == 2){
+            String s1 = "[current]";
+            String s2 = data.getStringExtra("destination");
+            if(s2.isEmpty() == false){
+                sendRequest(s1,s2);
+            }else{
+                return;
+            }
+        }
     }
 
     public void sendRequest(String origin, String destination){
@@ -97,11 +106,13 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
             Toast.makeText(MapsActivity.this,"Bạn chưa nhập địa điểm kết thúc",Toast.LENGTH_LONG).show();
             return;
         }
-        if(origin == "[current]"){
-       //     LatLng userLocation = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
-
-        if(origin == "[current]"){
-  //          LatLng userLocationdes = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+        LatLng userLocation = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+        String current = ((Double)userLocation.latitude).toString() + ',' + ((Double)userLocation.longitude).toString();
+        if(origin.compareTo("[current]") == 0) {
+            origin = current;
+        }
+        if(origin.compareTo("[current]") == 0){
+            destination = current;
         }
         try{
             new DirectionFinder(this, origin, destination).execute();
@@ -130,7 +141,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
     }
 
     @Override
-    public void onMyLocationClick(@NonNull Location loca    tion) {
+    public void onMyLocationClick(@NonNull Location location) {
         Toast.makeText(this, "Current location:\n" + location, Toast.LENGTH_LONG).show();
     }
 
@@ -144,7 +155,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
         }
         else{
             mMap.setMyLocationEnabled(true);
-           // lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            myLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         }
     }
 

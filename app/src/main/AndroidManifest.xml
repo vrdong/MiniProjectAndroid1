@@ -10,6 +10,10 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -39,9 +43,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".timduong" android:parentActivityName=".MapsActivity">
-
-        </activity>
+        <activity
+            android:name=".timduong"
+            android:parentActivityName=".MapsActivity"></activity>
+        <activity
+            android:name=".search_university"
+            android:parentActivityName=".MapsActivity"></activity>
+        <activity android:name=".dialog_listview" android:theme="@style/Theme.AppCompat.Dialog.Alert"></activity>
     </application>
 
 </manifest>
